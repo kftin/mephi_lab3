@@ -97,6 +97,7 @@ void *Tree<T>::find_pointer(T item, Element *ptr) {
 template <typename T>
 void Tree<T>::remove(T item, Element *ptr) {
     Element *tmp = (Element *)this->find_pointer(item, ptr);
+    //cout << "aaaaaaaaaaaaaaaaaaaaaaaaa " << tmp->value;
     if (tmp) {
         if (!tmp->lb->value) {
             if (!tmp->rb->value) {
@@ -135,10 +136,14 @@ void Tree<T>::remove(T item, Element *ptr) {
         } else if (!tmp->rb->value) {
             delete tmp->rb;
             tmp->lb->parent = tmp->parent;
-            if (tmp->value < tmp->parent->value) {
-                tmp->parent->lb = tmp->lb;
-            } else if (tmp->value > tmp->parent->value) {
-                tmp->parent->rb = tmp->lb;
+            if (this->root != tmp) {
+                if (tmp->value < tmp->parent->value) {
+                    tmp->parent->lb = tmp->lb;
+                } else if (tmp->value > tmp->parent->value) {
+                    tmp->parent->rb = tmp->lb;
+                }
+            } else {
+                this->root = tmp->lb;
             }
             delete tmp;
             this->amount--;
@@ -147,8 +152,10 @@ void Tree<T>::remove(T item, Element *ptr) {
             while (new_tmp->rb->value) {
                 new_tmp = new_tmp->rb;
             }
-            tmp->value = new_tmp->value;
+            T v = new_tmp->value;
+            //tmp->value = new_tmp->value;
             this->remove(new_tmp->value, new_tmp);
+            tmp->value = v;
         }
     }
 }
@@ -179,21 +186,28 @@ void Tree<T>::insert(T item, Element *ptr) {
 }
 
 int main() {
-    /*
+    
     int *ptr = new int[6];
     for (int i = 0; i < 6; i++) {
         cin >> ptr[i];
     }
-    Tree<int> *a = new Tree<int>(ptr, 6);*/
+    Tree<int> *a = new Tree<int>(ptr, 6);
+    delete[] ptr;
     //cout << a->root->rb->value << endl;
     //cout << a->root->lb->rb->parent->value << endl;
-    //cout << "find before remove: " <<  a->find(2, a->root) << a->find(4, a->root) << a->find(6, a->root) << a->find(5, a->root) << a->find(7, a->root) << a->find(9, a->root) << endl;
-    //a->remove(2, a->root);
+    cout << "find before remove: " <<  a->find(4, a->root) << a->find(1, a->root) << a->find(2, a->root) << a->find(6, a->root) << a->find(3, a->root) << a->find(5, a->root) << endl;
+    a->remove(1, a->root);
+    cout << "find after remove: " <<  a->find(4, a->root) << a->find(1, a->root) << a->find(2, a->root) << a->find(6, a->root) << a->find(3, a->root) << a->find(5, a->root) << endl;
     //cout << "find after remove: " <<  a->find(2, a->root) << a->find(4, a->root) << a->find(6, a->root) << a->find(5, a->root) << a->find(7, a->root) << a->find(9, a->root) << endl;
     //cout << "find 6 after remove:  " << a->find(6, a->root) << endl;
+    
+/*
     Tree<int> *a = new Tree<int>(2);
-    cout << a->find(2, a->root) << endl;
+    cout << a->find(2, a->root) << endl;  ////проверка удаления дерева из одного элемента
     a->remove(2, a->root);
+    delete a;
+*/
+
     delete a;
     //cout << a->find(2, a->root) << endl;
 }
