@@ -1,44 +1,70 @@
 #include <iostream>
 
-typedef <typename T>
+using namespace std;
+
+template <typename T>
 class Tree {
     private:
-        struct Element {
-            T value;
-            ELement *rb;
-            Element *lb;
-            //int length;
+        class Element {
+            public:
+                T value;
+                Element *rb;
+                Element *lb;
+                Element *parent;
+                //int length;
         };
+
+        //Element *root;
+        //int amount;
+
+    public:
+
         Element *root;
         int amount;
-    public:
+
         Tree(T item) {
             Element *tmp = new Element;
+            tmp->parent = NULL;
             tmp->value = item;
-            rb = new Element;
-            rb->value = NULL;
-            lb = new Element;
-            lb->value = NULL;
+
+            tmp->rb = new Element;
+            tmp->rb->parent = tmp;
+            tmp->rb->value = NULL;
+
+            tmp->lb = new Element;
+            tmp->lb->parent = tmp;
+            tmp->lb->value = NULL;
+
             //length = 0;
             root = tmp;
             amount = 1;
         }
         Tree(T *items, int count) {
             Element *tmp = new Element;
+            tmp->parent = NULL;
             tmp->value = items[0];
-            rb = new Element;
-            rb->value = NULL;
-            lb = new Element;
-            lb->value = NULL;
+            cout << items[0] << endl;
+
+            tmp->rb = new Element;
+            tmp->rb->parent = tmp;
+            tmp->rb->value = NULL;
+
+            tmp->lb = new Element;
+            tmp->lb->parent = tmp;
+            tmp->lb->value = NULL;
+
             //length = 0;
             root = tmp;
             amount = 1;
             for (int i = 1; i < count; i++) {
                 this->insert(items[i], root);
+                cout << items[i] << endl;
             }
         }
         bool find(T item, Element *ptr);
+        void *find_pointer(T item, Element *ptr);
         void insert(T item, Element *ptr);
+        void remove(T item, Element *ptr);
 };
 
 template <typename T>
@@ -55,14 +81,92 @@ bool Tree<T>::find(T item, Element *ptr) {
 }
 
 template <typename T>
+void *Tree<T>::find_pointer(T item, Element *ptr) {
+    if (!ptr->value) {
+        cout << "no element to remove" << endl;
+        return NULL;
+    } else if (ptr->value == item) {
+        return ptr;
+    } else if (ptr->value < item) {
+        return find_pointer(item, ptr->rb);
+    } else {
+        return find_pointer(item, ptr->lb);
+    }
+}
+
+template <typename T>
+void Tree<T>::remove(T item, Element *ptr) {
+    Element *tmp = (Element *)this->find_pointer(item, ptr);
+    if (tmp) {
+        if (!tmp->lb->value) {
+            if (!tmp->rb->value) {
+                delete tmp->rb;
+                delete tmp->lb;
+                if (tmp != this->root) {
+                    if (tmp->parent) {
+                        if (item < tmp->parent->value) {
+                            tmp->parent->lb = new Element;
+                            tmp->parent->lb->parent = tmp->parent;
+                            tmp->parent->lb->value = NULL;
+                        } else if (item > tmp->parent->value) {
+                            tmp->parent->rb = new Element;
+                            tmp->parent->rb->parent = tmp->parent;
+                            tmp->parent->rb->value = NULL;
+                        }
+                    }
+                }
+                delete tmp;
+                this->amount--;
+            } else {
+                delete tmp->lb;
+                tmp->rb->parent = tmp->parent;
+                if (this->root == tmp) {
+                    this->root = tmp->rb;
+                } else {
+                    if (tmp->value < tmp->parent->value) {
+                        tmp->parent->lb = tmp->rb;
+                    } else if (tmp->value > tmp->parent->value) {
+                        tmp->parent->rb = tmp->rb;
+                    }
+                }
+                delete tmp;
+                this->amount--;
+            }
+        } else if (!tmp->rb->value) {
+            delete tmp->rb;
+            tmp->lb->parent = tmp->parent;
+            if (tmp->value < tmp->parent->value) {
+                tmp->parent->lb = tmp->lb;
+            } else if (tmp->value > tmp->parent->value) {
+                tmp->parent->rb = tmp->lb;
+            }
+            delete tmp;
+            this->amount--;
+        } else {
+            Element *new_tmp = tmp->lb;
+            while (new_tmp->rb->value) {
+                new_tmp = new_tmp->rb;
+            }
+            tmp->value = new_tmp->value;
+            this->remove(new_tmp->value, new_tmp);
+        }
+    }
+}
+
+template <typename T>
 void Tree<T>::insert(T item, Element *ptr) {
     if (!ptr->value) {
         //Element *tmp = new Element;
         ptr->value = item;
+
         ptr->rb = new Element;
-        ptr->rb->value = NULL
+        ptr->rb->parent = ptr;
+        ptr->rb->value = NULL;
+
         ptr->lb = new Element;
+        ptr->lb->parent = ptr;
         ptr->lb->value = NULL;
+
         this->amount++;
         // length = 1;
     } else if(ptr->value == item) {
@@ -75,5 +179,21 @@ void Tree<T>::insert(T item, Element *ptr) {
 }
 
 int main() {
+    /*
+    int *ptr = new int[6];
+    for (int i = 0; i < 6; i++) {
+        cin >> ptr[i];
+    }
+    Tree<int> *a = new Tree<int>(ptr, 6);*/
+    //cout << a->root->rb->value << endl;
+    //cout << a->root->lb->rb->parent->value << endl;
+    //cout << "find before remove: " <<  a->find(2, a->root) << a->find(4, a->root) << a->find(6, a->root) << a->find(5, a->root) << a->find(7, a->root) << a->find(9, a->root) << endl;
+    //a->remove(2, a->root);
+    //cout << "find after remove: " <<  a->find(2, a->root) << a->find(4, a->root) << a->find(6, a->root) << a->find(5, a->root) << a->find(7, a->root) << a->find(9, a->root) << endl;
+    //cout << "find 6 after remove:  " << a->find(6, a->root) << endl;
     Tree<int> *a = new Tree<int>(2);
+    cout << a->find(2, a->root) << endl;
+    a->remove(2, a->root);
+    delete a;
+    //cout << a->find(2, a->root) << endl;
 }
