@@ -1,8 +1,7 @@
 #ifndef TREE
 #define TREE
 
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -16,38 +15,20 @@ class Tree {
                 Element *lb;
         };
 
-        //Element *root;
-        //int amount;
-
-    public:
-
         Element *root;
         int amount;
 
-        Tree(T item) {
-            Element *tmp = new Element;
-            tmp->value = item;
-            tmp->rb = nullptr;
-            tmp->lb = nullptr;
-            root = tmp;
-            amount = 1;
-        }
-        Tree(T *items, int count) {
-            Element *tmp = new Element;
-            tmp->value = items[0];
-            tmp->rb = nullptr;
-            tmp->lb = nullptr;
-            root = tmp;
-            amount = 1;
-            for (int i = 1; i < count; i++) {
-                this->insert(items[i], root);
+        bool find(T item, Element *ptr) {
+            if (ptr == nullptr) {
+                return false;
+            } else if (ptr->value == item) {
+                return true;
+            } else if (ptr->value < item) {
+                return find(item, ptr->rb);
+            } else {
+                return find(item, ptr->lb);
             }
         }
-        bool find(T item) {
-            return this->find(item, root);
-
-        }
-        bool find(T item, Element *ptr);
 
         Element *insert(T item, Element *ptr) {
             if (ptr == nullptr) {
@@ -108,21 +89,24 @@ class Tree {
             }
             return ptr;
         }
-        void remove(T item) {
-            root = remove(item, root);
-        }
 
-        void print(Element *ptr);
-        //void save_to_mas(T *item, int *n, Element *ptr);
-        //string save_to_string();
-
-        Element *delete_tree(Element *ptr) {
+        void print(Element *ptr) {
             if (ptr == nullptr) {
-                return nullptr;
+                return;
             }
             print(ptr->lb);
-            delete ptr;
+            cout << ptr->value << ' ';
             print(ptr->rb);
+        }
+
+        void delete_tree(Element *ptr) {
+            if (ptr == nullptr) {
+                return;
+            }
+            delete_tree(ptr->lb);
+            Element *tmp = ptr->rb;
+            delete ptr;
+            delete_tree(tmp);
         }
 
         void SaveToString(string &s, Element *ptr) {
@@ -139,58 +123,99 @@ class Tree {
             s += ')';
         }
 
+        Element *Map(Element *ptr, function<T(const T&)> f) const {
+            if (ptr == nullptr) {
+                return nullptr;
+            }
+            auto np = new Element;
+            np->value = f(ptr->value);
+            np->lb = Map(ptr->lb, f);
+            np->rb = Map(ptr->rb, f);
+            return np;
+        }
+
+        void Where(Tree<T> *tree, Element *ptr, function<bool(const T&)> f) const {
+            if (ptr == nullptr) {
+                return;
+            }
+            if (f(ptr->value)) {
+                tree->insert(ptr->value);
+            }
+            if (ptr->lb) {
+                Where(tree, ptr->lb, f);
+            }
+            if (ptr->rb) {
+                Where(tree, ptr->rb, f);
+            }
+        }
+
+    public:
+
+        Tree() {
+            root = nullptr;
+        }
+        
+        Tree(T item) {
+            Element *tmp = new Element;
+            tmp->value = item;
+            tmp->rb = nullptr;
+            tmp->lb = nullptr;
+            root = tmp;
+            amount = 1;
+        }
+
+        Tree(T *items, int count) {
+            Element *tmp = new Element;
+            tmp->value = items[0];
+            tmp->rb = nullptr;
+            tmp->lb = nullptr;
+            root = tmp;
+            amount = 1;
+            for (int i = 1; i < count; i++) {
+                this->insert(items[i], root);
+            }
+        }
+
+        bool find(T item) {
+            return this->find(item, root);
+
+        }
+
+        void insert(T item) {
+            insert(item, root);
+        }
+
         string save_to_string() {
             string res = "";
             SaveToString(res, root);
             return res;
         }
+
+        void delete_() {
+            delete_tree(root);
+        }
+
+        void remove(T item) {
+            root = remove(item, root);
+        }
+
+        void print () {
+            cout << "tree: " << '\t';
+            print(root);
+            cout << endl;
+        }
+
+        Tree<T> *map(function<T(const T&)> f) const {
+            auto newTree = new Tree<T>;
+            newTree->root = Map(root, f);
+            return newTree;
+        }
+
+        Tree<T> *where(function<bool(const T&)> f) const {
+            auto newTree = new Tree<T>;
+            Where(newTree, root, f);
+            return newTree;
+        }
 };
-/*
-template <typename T>
-string Tree<T>::save_to_string() {
-    int n = 0;
-    T *items = new T[amount];
-    save_to_mas(items, &n, root);
-    string new_string;
-    for (int i = 0; i < amount; i++) {
-        new_string.append(1, '0' + items[i]);
-    }
-    cout << "new_string: "  << new_string << endl;
-    return new_string;
-}
-
-template <typename T>
-void Tree<T>::save_to_mas(T *items, int *n, Element *ptr) {
-    if (ptr == nullptr) {
-        return;
-    }
-    save_to_mas(items, n, ptr->lb);
-    items[(*n)] = ptr->value;
-    (*n)++;
-    save_to_mas(items, n, ptr->rb);
-}*/
-
-template <typename T>
-void Tree<T>::print(Element *ptr) {
-    if (ptr == nullptr) {
-        return;
-    }
-    print(ptr->lb);
-    cout << ptr->value << ' ';
-    print(ptr->rb);
-}
-
-template <typename T>
-bool Tree<T>::find(T item, Element *ptr) {
-    if (ptr == nullptr) {
-        return false;
-    } else if (ptr->value == item) {
-        return true;
-    } else if (ptr->value < item) {
-        return find(item, ptr->rb);
-    } else {
-        return find(item, ptr->lb);
-    }
-}
 
 #endif

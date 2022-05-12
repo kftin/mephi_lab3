@@ -1,55 +1,62 @@
-#include <iostream>
+#include <bits/stdc++.h>
+
+#include <functional>
 
 #include "tree.h"
 
 using namespace std;
 
+int func(const int& a) { return a + 5; }
+
+bool f(const int& a) { return (a > 2); }
+
 int main() {
-    
-    int *ptr = new int[6];
-    for (int i = 0; i < 6; i++) {
+
+    cout << "Let's create a tree with 10 elements: 37 12 45 5 30 89 41 43 39 22" << endl;
+    int *ptr = new int[10];
+    for (int i = 0; i < 10; i++) {
         cin >> ptr[i];
     }
-    Tree<int> *a = new Tree<int>(ptr, 6);
+    Tree<int> *a = new Tree<int>(ptr, 10);
+
+    cout << endl;
+    cout << "Save to string: ";
     string str = a->save_to_string();
-    cout << str << endl;
-    //cout << a->root->rb->value << "  root->rb " << endl;
-/*
-    cout << "tree: " << endl << '\t';
-    a->print(a->root);
+    cout << str << endl << endl;
+
+    cout << "Let's remove some elements: 37(root), 45(have two children), 89(have no children), 12(have one left child)" << endl << endl;
+    a->remove(37);
+    a->remove(45);
+    a->remove(89);
+    a->remove(12);
+
+    cout << "Let's take a look at our tree and save to string: " << endl << endl;;
+    a->print();
+    cout << endl;
+    str = a->save_to_string();
+    cout << str << endl << endl;
+
+    cout << "Let's try to find 37: " << endl << '\t';
+    cout << a->find(37) << " right. We have removed this element" << endl;
+    cout << "Let's try to find 22: " << endl << '\t';
+    cout << a->find(22) << " right. This element is ini place" << endl;
     cout << endl;
 
     delete[] ptr;
 
-    cout << "find before remove: " <<  a->find(1, a->root) << a->find(2, a->root) << a->find(3, a->root) << a->find(4, a->root) << a->find(5, a->root) << a->find(6, a->root) << endl;
-   
-    a->remove(4);
 
-    cout << "find after remove '4' - root: " <<  a->find(1, a->root) << a->find(2, a->root) << a->find(3, a->root) << a->find(4, a->root) << a->find(5, a->root) << a->find(6, a->root) << endl;
-    cout << "tree after remove '4' - root: " << endl << '\t';
-    a->print(a->root);
+    cout << "Let's use map and add 5 to all elements: " << endl << '\t';
+    auto newTree = a->map(func);
+    cout << "result ";
+    newTree->print();
     cout << endl;
 
-    a->remove(6);
-    cout << "find after remove '6': " <<  a->find(1, a->root) << a->find(2, a->root) << a->find(3, a->root) << a->find(4, a->root) << a->find(5, a->root) << a->find(6, a->root) << endl;
-    cout << "tree after remove '6': " << endl << '\t';
-    a->print(a->root);
+    cout << "Let's use where with elements > 2: " << endl << '\t';
+    auto nnewTree = a->where(f);
+    cout << "result ";
+    nnewTree->print();
     cout << endl;
-    
-    a->insert(7, a->root);
-    a->insert(6, a->root);
-    cout << "find after insert '7' '6'  : " <<  a->find(1, a->root) << a->find(2, a->root) << a->find(3, a->root) << a->find(4, a->root) << a->find(5, a->root) << a->find(6, a->root) << a->find(7, a->root) << endl;
-    cout << "tree after insert '7' '6' : " << endl << '\t';
-    a->print(a->root);
-    cout << endl;
+    cout << nnewTree->find(5) << endl;
 
-    a->remove(5);
-    cout << "find after remove '5' : " <<  a->find(1, a->root) << a->find(2, a->root) << a->find(3, a->root) << a->find(4, a->root) << a->find(5, a->root) << a->find(6, a->root) << a->find(7, a->root) << endl;
-    cout << "tree after remove '5' : " << endl << '\t';
-    a->print(a->root);
-    cout << endl;
-
-    delete a;
-    */
-   
+    a->delete_();
 }
