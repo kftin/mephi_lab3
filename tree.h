@@ -182,7 +182,7 @@ class Tree {
         }
 
         void insert(T item) {
-            insert(item, root);
+            root = insert(item, root);
         }
 
         string save_to_string() {

@@ -8,7 +8,7 @@ using namespace std;
 
 int func(const int& a) { return a + 5; }
 
-bool f(const int& a) { return (a > 2); }
+bool f(const int& a) { return (a > 30); }
 
 int main() {
 
@@ -53,6 +53,9 @@ int main() {
 
     cout << "Let's use where with elements > 2: " << endl << '\t';
     auto nnewTree = a->where(f);
+    if (!nnewTree) {
+        cout << "AAAAAAAAAAAAAa" << endl;
+    }
     cout << "result ";
     nnewTree->print();
     cout << endl;
