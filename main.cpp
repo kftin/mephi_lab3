@@ -11,8 +11,10 @@ int main() {
         cin >> ptr[i];
     }
     Tree<int> *a = new Tree<int>(ptr, 6);
+    string str = a->save_to_string();
+    cout << str << endl;
     //cout << a->root->rb->value << "  root->rb " << endl;
-
+/*
     cout << "tree: " << endl << '\t';
     a->print(a->root);
     cout << endl;
@@ -48,4 +50,6 @@ int main() {
     cout << endl;
 
     delete a;
+    */
+   
 }

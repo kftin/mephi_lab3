@@ -1,6 +1,9 @@
 #ifndef TREE
 #define TREE
 
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 template <typename T>
@@ -39,6 +42,10 @@ class Tree {
             for (int i = 1; i < count; i++) {
                 this->insert(items[i], root);
             }
+        }
+        bool find(T item) {
+            return this->find(item, root);
+
         }
         bool find(T item, Element *ptr);
 
@@ -106,6 +113,8 @@ class Tree {
         }
 
         void print(Element *ptr);
+        //void save_to_mas(T *item, int *n, Element *ptr);
+        //string save_to_string();
 
         Element *delete_tree(Element *ptr) {
             if (ptr == nullptr) {
@@ -115,7 +124,51 @@ class Tree {
             delete ptr;
             print(ptr->rb);
         }
+
+        void SaveToString(string &s, Element *ptr) {
+            if (ptr == nullptr) {
+                s += "null";
+                return;
+            }
+            s += '(';
+            SaveToString(s, ptr->lb);
+            s += ',';
+            s += to_string(ptr->value);
+            s += ',';
+            SaveToString(s, ptr->rb);
+            s += ')';
+        }
+
+        string save_to_string() {
+            string res = "";
+            SaveToString(res, root);
+            return res;
+        }
 };
+/*
+template <typename T>
+string Tree<T>::save_to_string() {
+    int n = 0;
+    T *items = new T[amount];
+    save_to_mas(items, &n, root);
+    string new_string;
+    for (int i = 0; i < amount; i++) {
+        new_string.append(1, '0' + items[i]);
+    }
+    cout << "new_string: "  << new_string << endl;
+    return new_string;
+}
+
+template <typename T>
+void Tree<T>::save_to_mas(T *items, int *n, Element *ptr) {
+    if (ptr == nullptr) {
+        return;
+    }
+    save_to_mas(items, n, ptr->lb);
+    items[(*n)] = ptr->value;
+    (*n)++;
+    save_to_mas(items, n, ptr->rb);
+}*/
 
 template <typename T>
 void Tree<T>::print(Element *ptr) {
