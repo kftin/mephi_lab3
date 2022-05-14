@@ -29,10 +29,6 @@ class Set {
             tree->print();
         }
 
-        string save_to_string() {
-            return tree->save_to_string();
-        }
-
         Set<T> *map(function<T(const T&)> f) {
             auto newTree = tree->map(f);
             auto newSet = new Set<T>;
@@ -86,7 +82,7 @@ class Set {
             return true;
         }
 
-        bool Equal(Set<T> *ns) {
+        bool Equality(Set<T> *ns) {
             T *values1 = tree->get_values();
             int size1 = tree->getSize();
             T *values2 = ns->tree->get_values();
@@ -102,7 +98,49 @@ class Set {
             return true;
         }
 
+        string save_to_string() {
+            T *values = tree->get_values();
+            string res;
+            int size = tree->getSize();
+            for (int i = 0; i < size; i++) {
+                res += to_string(values[i]);
+                res += ',';
+                res += ' ';
+            }
+            res.pop_back();
+            res.pop_back();
+            return res;
+        }
 
+        Set<T> *Read_from_string(string s) {
+            int ind = 0;
+            Set<T> *res = new Set<T>;
+            int size = s.length();
+            for (int i = 0; i < size; i++) {
+                //cout << '\t' << s[i] << endl;
+                if (s[i] == ',') {
+                    string str = s.substr(ind, i - 1);
+                    if (ind != i - 1 ) {
+                        cout << str << endl;
+                        const char *c_str = str.c_str();
+                        int a = atoi(c_str);
+                        res->insert(a);
+                    } else {
+                        string str1;
+                        str1.append(1, s[ind]);
+                        const char *c_str1 = str1.c_str();
+                        int d = atoi(c_str1);
+                        res->insert(d);
+                    }
+                    ind = i + 2;
+                }
+            }
+            string str = s.substr(ind, size - 1);
+            const char *c_str = str.c_str();
+            int b = atoi(c_str);
+            res->insert(b);
+            return res;
+        }
 };
 
 #endif

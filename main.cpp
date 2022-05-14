@@ -116,4 +116,46 @@ int main() {
     cout << "Let's subtract the second from the first" << endl << '\t';
     set->subtract(set1);
     set->print();
+    cout << endl;
+
+    cout << "Let's create two identical sets and check them for equality, elements: 5 1 13 8" << endl;
+    auto set2 = new Set<int>;
+    auto set3 = new Set<int>;
+    set2->insert(5);
+    set3->insert(5);
+    set2->insert(1);
+    set3->insert(1);
+    set2->insert(13);
+    set3->insert(13);
+    set2->insert(8);
+    set3->insert(8);
+
+    cout << "first: " << endl << '\t';
+    set2->print();
+    cout << endl;
+    cout << "second: " << endl << '\t';
+    set3->print();
+    cout << endl;
+    cout << "Are they equal?  " << set2->Equality(set3) << "  Great!" << endl;
+    cout << "Let's add element 99 at the second set and look at result again " << endl;
+    set3->insert(99);
+    cout << "second: " << endl << '\t';
+    set3->print();
+    cout << "Are they equal?  " << set2->Equality(set3) << "  OK. They aren't equal" << endl << endl;
+
+    cout << "Now, let's check if the first without 99 is a subset of the second: " << set2->Subset(set3) << " Yes! We WON!!!" << endl;
+
+    cout << "Let's save to string our set: " << endl << '\t';
+    string str1 = set2->save_to_string();
+    cout << str1 << endl;
+
+    cout << "And now read from string our set: " << endl << '\t';
+    auto set4 = set2->Read_from_string(str1);
+    set4->print();
+    cout << endl;
+    cout << "insert element 6 and save to string again" << endl;
+    set4->insert(6);
+    string str2 = set4->save_to_string();
+    cout << str2 << endl;
+
 }
