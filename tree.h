@@ -15,8 +15,8 @@ class Tree {
                 Element *lb;
         };
 
-        Element *root;
-        int amount;
+        //Element *root;
+        //int amount;
 
         bool find(T item, Element *ptr) {
             if (ptr == nullptr) {
@@ -134,6 +134,19 @@ class Tree {
             return np;
         }
 
+        void SubTree(Tree<T> *tree, Element *ptr) const {
+            if (ptr == nullptr) {
+                return;
+            }
+            tree->insert(ptr->value);
+            if (ptr->lb) {
+                SubTree(tree, ptr->lb);
+            }
+            if (ptr->rb) {
+                SubTree(tree, ptr->rb);
+            }
+        }
+
         void Where(Tree<T> *tree, Element *ptr, function<bool(const T&)> f) const {
             if (ptr == nullptr) {
                 return;
@@ -149,7 +162,30 @@ class Tree {
             }
         }
 
+        void GetValues(Element *ptr, T *res, int &ind) {
+            if (ptr == nullptr) {
+                return;
+            }
+            GetValues(ptr->lb, res, ind);
+            res[ind] = ptr->value;
+            ind++;
+            GetValues(ptr->rb, res, ind);
+
+        }
+
+        void countNodes(Element *ptr, int &cnt) {
+            if (ptr == nullptr) {
+                return;
+            }
+            cnt++;
+            countNodes(ptr->lb, cnt);
+            countNodes(ptr->rb, cnt);
+        }
+
     public:
+        
+        Element *root;
+        int amount;
 
         Tree() {
             root = nullptr;
@@ -199,7 +235,7 @@ class Tree {
             root = remove(item, root);
         }
 
-        void print () {
+        void print() {
             cout << "tree: " << '\t';
             print(root);
             cout << endl;
@@ -215,6 +251,25 @@ class Tree {
             auto newTree = new Tree<T>;
             Where(newTree, root, f);
             return newTree;
+        }
+
+        Tree<T> *sub_tree(Element *ptr) const {
+            auto newTree = new Tree<T>;
+            SubTree(newTree, ptr);
+            return newTree;
+        }
+
+        T *get_values() {
+            T *res = new T[this->getSize()];
+            int ind = 0;
+            GetValues(root, res, ind);
+            return res;
+        }
+
+        int getSize() {
+            int ans = 0;
+            countNodes(root, ans);
+            return ans;
         }
 };
 

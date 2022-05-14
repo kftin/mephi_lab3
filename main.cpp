@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "tree.h"
+#include "set.h"
 
 using namespace std;
 
@@ -42,6 +43,13 @@ int main() {
     cout << a->find(22) << " right. This element is ini place" << endl;
     cout << endl;
 
+    cout << "Let's try to extract subtree from our tree from element 43 (we have to get tree 43 41 39): " << endl << '\t';
+    auto nnnewTree = a->sub_tree(a->root->rb);
+    cout << "result ";
+    nnnewTree->print();
+    cout << endl;
+    nnnewTree->delete_();
+
     delete[] ptr;
 
 
@@ -50,16 +58,33 @@ int main() {
     cout << "result ";
     newTree->print();
     cout << endl;
+    newTree->delete_();
 
-    cout << "Let's use where with elements > 2: " << endl << '\t';
+    cout << "Let's use where with elements > 30: " << endl << '\t';
     auto nnewTree = a->where(f);
-    if (!nnewTree) {
-        cout << "AAAAAAAAAAAAAa" << endl;
-    }
     cout << "result ";
     nnewTree->print();
     cout << endl;
     cout << nnewTree->find(5) << endl;
+    nnewTree->delete_();
+
+    auto set = new Set<int>;
+    set->insert(37);
+    set->insert(12);
+    set->insert(45);
+    set->insert(5);
+    set->insert(30);
+    set->insert(41);
+    set->insert(89);
+
+    auto set1 = new Set<int>;
+    set->insert(31);
+    set->insert(20);
+    set->insert(72);
+    set->insert(1);
+
+    set->unionSets(set1);
+    set->print();
 
     a->delete_();
 }
