@@ -69,6 +69,11 @@ int main() {
     nnewTree->delete_();
 
     auto set = new Set<int>;
+
+    auto set1 = new Set<int>;
+
+    cout << "Let's create two sets on trees from elements:" << endl << '\t';
+    cout << "first set: 37 12 45 5 30 41 89" << endl << '\t';
     set->insert(37);
     set->insert(12);
     set->insert(45);
@@ -76,15 +81,39 @@ int main() {
     set->insert(30);
     set->insert(41);
     set->insert(89);
+    set->print();
+    cout << endl << '\t';
 
-    auto set1 = new Set<int>;
-    set->insert(31);
-    set->insert(20);
-    set->insert(72);
-    set->insert(1);
+    cout << "second set: 30 31 20 72 1 5" << endl << '\t';
+    set1->insert(30);
+    set1->insert(31);
+    set1->insert(20);
+    set1->insert(72);
+    set1->insert(1);
+    set1->insert(5);
+    set1->print();
+    cout<< endl;
 
+    cout << "Let's connect these sets" << endl << '\t';
     set->unionSets(set1);
     set->print();
 
-    a->delete_();
+    set->remove(31);
+    set->remove(20);
+    set->remove(72);
+    set->remove(1);
+
+    cout << "Let's intersection of these sets" << endl << '\t';
+    set->intersect(set1);
+    set->print();
+
+    set->insert(37);
+    set->insert(12);
+    set->insert(45);
+    set->insert(41);
+    set->insert(89);
+
+    cout << "Let's subtract the second from the first" << endl << '\t';
+    set->subtract(set1);
+    set->print();
 }

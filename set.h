@@ -75,6 +75,33 @@ class Set {
             }
         }
 
+        bool Subset(Set<T> *ns) {
+            T *values = tree->get_values();
+            int size = tree->getSize();
+            for (int i = 0; i < size; i++) {
+                if (!ns->find(values[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool Equal(Set<T> *ns) {
+            T *values1 = tree->get_values();
+            int size1 = tree->getSize();
+            T *values2 = ns->tree->get_values();
+            int size2 = ns->tree->getSize();
+            if (size1 != size2) {
+                return false;
+            }
+            for (int i = 0; i < size1; i++) {
+                if (values1[i] != values2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
 };
 
