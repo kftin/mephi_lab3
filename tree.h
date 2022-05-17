@@ -30,6 +30,20 @@ class Tree {
             }
         }
 
+        Element *find_pointer(T item, Element *ptr) {
+            if (ptr == nullptr) {
+                return nullptr;
+            } else if (ptr->value == item) {
+                return ptr;
+            } else if (ptr->value < item) {
+                return find_pointer(item, ptr->rb);
+            } else {
+                return find_pointer(item, ptr->lb);
+            }
+        }
+
+
+
         Element *insert(T item, Element *ptr) {
             if (ptr == nullptr) {
                 ptr = new Element;
@@ -182,6 +196,25 @@ class Tree {
             countNodes(ptr->rb, cnt);
         }
 
+        void Equality_trees(Element *t1, Element *t2, bool &E_B) {
+            if (t1 == nullptr && t2 == nullptr) {
+                return;
+            } else if (t1 == nullptr && t2 != nullptr) {
+                E_B = false;
+                return;
+            } else if (t1 != nullptr && t2 == nullptr) {
+                E_B = false;
+                return;
+            } else if (t1->value != t2->value) {
+                E_B = false;
+                return;
+            } else {
+                Equality_trees(t1->lb, t2->lb, E_B);
+                Equality_trees(t1->rb, t2->rb, E_B);
+                return;
+            }
+        }
+
     public:
         
         Element *root;
@@ -270,6 +303,13 @@ class Tree {
             int ans = 0;
             countNodes(root, ans);
             return ans;
+        }
+
+        bool equality_trees(Tree<T> *t) {
+            bool e_b = true;
+            Element *tmp = find_pointer(t->root->value, root);
+            Equality_trees(tmp, t->root, e_b);
+            return e_b;
         }
 };
 

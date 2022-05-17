@@ -19,6 +19,12 @@ int main() {
         cin >> ptr[i];
     }
     Tree<int> *a = new Tree<int>(ptr, 10);
+    Tree<int> *w = a->sub_tree(a->root->rb);
+    bool e_b = a->equality_trees(w);
+    cout << "Create new tree from root->rb and call function check for subtree this tree: " << e_b << endl;
+    w->insert(76);
+    e_b = a->equality_trees(w);
+    cout << "insert 76 into the second tree and check for subtree: " << e_b << endl;
 
     cout << endl;
     cout << "Save to string: ";
